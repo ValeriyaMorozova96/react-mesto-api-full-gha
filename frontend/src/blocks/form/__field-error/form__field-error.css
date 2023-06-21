@@ -1,0 +1,11 @@
+.form__field-error{
+    color: red;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 14.52px;
+    min-height: 30px;
+    display: block;
+    margin-top: 5px;
+    max-width: 282px;
+}
+

@@ -1,0 +1,8 @@
+.card__caption {
+    display: flex;
+    justify-content: space-between;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    padding-left: 21px;
+    padding-right: 15px;
+}
