@@ -1,3 +1,5 @@
+require('dotenv').config();
+const cors = require('cors');
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -13,10 +15,11 @@ const { createUser, login } = require('./controllers/users');
 const { signinValidation, signupValidation } = require('./utils/validation');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const { PORT = 3000 } = process.env;
+const { PORT = 3000, MONGO_URL = 'mongodb://127.0.0.1/mestodb' } = process.env;
 const app = express();
+app.use(cors());
 
-mongoose.connect('mongodb://127.0.0.1/mestodb');
+mongoose.connect(MONGO_URL);
 mongoose.set({ runValidators: true });
 
 app.use(bodyParser.json());
@@ -30,6 +33,12 @@ app.use(rateLimiter);
 app.use(helmet());
 
 app.use(requestLogger);
+
+app.get('/crash-test', () => {
+  setTimeout(() => {
+    throw new Error('Сервер сейчас упадёт');
+  }, 0);
+});
 
 app.post('/signup', signupValidation, createUser);
 app.post('/signin', signinValidation, login);
