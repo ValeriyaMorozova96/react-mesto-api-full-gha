@@ -9,6 +9,9 @@ export class Api {
         }
         return Promise.reject(`Ошибка: ${res.status}`);
     }
+    setToken(token) {
+        this._headers.authorization = `Bearer ${token}`;
+      }
     getMyInfo() {
         return fetch(`${this._url}/users/me`,
             {
@@ -80,9 +83,9 @@ export class Api {
 }
 
 const api = new Api({
-    url: "https://mesto.nomoreparties.co/v1/cohort-61",
+    url: "http://localhost:3000",
     headers: {
-        "authorization": "9512f6eb-2c3f-4ba0-932f-a124d815c2ac",
+        "authorization": "",
         "Content-Type": "application/json",
     }
 });

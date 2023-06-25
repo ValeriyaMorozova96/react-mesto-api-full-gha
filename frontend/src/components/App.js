@@ -34,14 +34,17 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const jwt = localStorage.getItem('jwt');
-    if (jwt) {
+    const token = localStorage.getItem('jwt');
+    if (token) {
       auth
-        .checkToken(jwt)
-        .then(res => {
-          setIsLoggedIn(true);
-          setEmail(res.data.email);
-          navigate('/');
+        .checkToken(token)
+        .then((res) => {
+          if (res) {
+            api.setToken(token);
+            setIsLoggedIn(true);
+            setEmail(res.email);
+            navigate('/');
+          }
         })
         .catch(err => {
           if (err.status === 400) {
@@ -51,7 +54,7 @@ function App() {
           }
         });
     }
-  }, []);
+  }, [navigate, isLoggedIn]);
 
   function handleRegisterSubmit(email, password) {
     auth
@@ -74,10 +77,11 @@ function App() {
     auth
       .login(email, password)
       .then((res) => {
-        localStorage.setItem('jwt', res.token);
-        setIsLoggedIn(true);
-        setEmail(email);
-        navigate('/');
+          localStorage.setItem('jwt', res.token);
+          api.setToken(res.token);
+          setIsLoggedIn(true);
+          setEmail(email);
+          navigate('/');
       })
       .catch(err => {
         if (err.status === 400) {
@@ -93,6 +97,7 @@ function App() {
   function handleSignOut() {
     localStorage.removeItem('jwt');
     setIsLoggedIn(false);
+    api.setToken(null);
     navigate('/sign-in');
   }
 
@@ -143,7 +148,7 @@ function App() {
   }
 
   function handleCardLike(card) {
-    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    const isLiked = card.likes.some((id) => id === currentUser._id);
 
     api.changeLikeCardStatus(card._id, !isLiked)
       .then((newCard) => {

@@ -5,10 +5,12 @@ const NotFoundError = require('../utils/errors/NotFoundError');
 const BadRequestError = require('../utils/errors/BadRequestError');
 const ConflictError = require('../utils/errors/ConflictError');
 
+const { NODE_ENV, JWT_SECRET = 'JWT_SECRET' } = process.env;
+
 module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => {
-      res.send({ data: users });
+      res.send(users);
     })
     .catch(next);
 };
@@ -17,7 +19,7 @@ module.exports.getUserById = (req, res, next) => {
   User.findById(req.params.userId)
     .then((user) => {
       if (user) {
-        res.send({ data: user });
+        res.send(user);
       } else {
         throw new NotFoundError('Пользователь по указанному _id не найден');
       }
@@ -74,8 +76,8 @@ module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
   User.findUserByCredentials(email, password)
     .then((user) => {
-      const token = jwt.sign({ _id: user._id }, 'some-secret-key', { expiresIn: '7d' });
-      res.send({ _id: token });
+      const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
+      return res.send({ token });
     })
     .catch((next));
 };
@@ -86,7 +88,7 @@ module.exports.updateUser = (req, res, next) => {
   return User.findByIdAndUpdate(userId, { name, about }, { new: true, runValidators: true })
     .then((user) => {
       if (user) {
-        res.send({ data: user });
+        res.send(user);
       } else {
         throw new NotFoundError('Пользователь с указанным _id не найден');
       }
@@ -105,7 +107,7 @@ module.exports.updateAvatar = (req, res, next) => {
   return User.findByIdAndUpdate(userId, { avatar }, { new: true, runValidators: true })
     .then((user) => {
       if (user) {
-        res.send({ data: user });
+        res.send(user);
       } else {
         throw new NotFoundError('Пользователь с указанным _id не найден');
       }
