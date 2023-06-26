@@ -83,7 +83,7 @@ export class Api {
 }
 
 const api = new Api({
-    url: "http://localhost:3000",
+    url: "https://api.morozovavs.nomoreparties.sbs",
     headers: {
         "authorization": "",
         "Content-Type": "application/json",
