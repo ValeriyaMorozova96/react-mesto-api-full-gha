@@ -77,11 +77,11 @@ function App() {
     auth
       .login(email, password)
       .then((res) => {
-          localStorage.setItem('jwt', res.token);
-          api.setToken(res.token);
-          setIsLoggedIn(true);
-          setEmail(email);
-          navigate('/');
+        localStorage.setItem('jwt', res.token);
+        api.setToken(res.token);
+        setIsLoggedIn(true);
+        setEmail(email);
+        navigate('/');
       })
       .catch(err => {
         if (err.status === 400) {
@@ -115,7 +115,7 @@ function App() {
     if (isLoggedIn) {
       api.getServerCards()
         .then((cards) => {
-          setCards(cards);
+          setCards(cards.reverse());
         })
         .catch((err) => { console.log(err) })
     }

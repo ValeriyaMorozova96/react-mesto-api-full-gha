@@ -29,10 +29,10 @@ const rateLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
 });
-app.use(rateLimiter);
 app.use(helmet());
 
 app.use(requestLogger);
+app.use(rateLimiter);
 
 app.get('/crash-test', () => {
   setTimeout(() => {
@@ -48,11 +48,10 @@ app.use(auth);
 app.use('/', userRoutes);
 app.use('/', cardRoutes);
 
-app.use(errorLogger);
-
 app.use('/*', (req, res, next) => {
   next(new NotFoundError('Страница не найдена'));
 });
+app.use(errorLogger);
 
 app.use(errors());
 app.use(errorHandler);
