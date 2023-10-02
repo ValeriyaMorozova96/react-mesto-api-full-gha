@@ -9,7 +9,6 @@
 
 IP 158.160.26.20
 
-Frontend https://morozovavs.nomoreparties.sbs
+Frontend https://morozovavs.nomoreparties.sbs (виртуальная машина остановлена)
 
-Backend https://api.morozovavs.nomoreparties.sbs
-(виртуальная машина остановлена)
+Backend https://api.morozovavs.nomoreparties.sbs (виртуальная машина остановлена)
